@@ -23,15 +23,24 @@ const App = () => {
   const [searchText, setSearchText] = useState(''); 
 
   
-  useEffect(() =>{
+  useEffect(async () =>{
     const savedNotes = JSON.parse(localStorage.getItem('react-notes-app-data'));
+
     if(savedNotes) {
       setNotes(savedNotes);
     }
   }, []);
 
-  useEffect(() =>{
+  useEffect(async () =>{
     localStorage.setItem('react-notes-app-data', JSON.stringify(notes));
+    const res = await fetch('https://notesapp-6fbef-default-rtdb.firebaseio.com/notes.json', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(notes)
+            })
+          
   }, [notes]);
 
   const addNote = (text) => {
